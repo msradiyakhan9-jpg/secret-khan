@@ -1,40 +1,97 @@
+"""
+Application Configuration
+"""
+
+from __future__ import annotations
+
 import os
 from dataclasses import dataclass
-from dotenv import load_dotenv
-
-load_dotenv()
-
-
-def get_required(name: str) -> str:
-    value = os.getenv(name)
-
-    if not value:
-        raise RuntimeError(
-            f"Required environment variable is missing: {name}"
-        )
-
-    return value
 
 
 @dataclass(frozen=True)
 class Settings:
+    # ========================================================
     # Telegram
-    bot_token: str
-    owner_id: int
+    # ========================================================
 
+    bot_token: str = os.getenv("BOT_TOKEN",8406688505:AAGkmKI4rUagmq7n9wlV30ZodOAWecZZRAo "")
+    owner_id: int = int(os.getenv("OWNER_ID", "8547982063"))
+
+    # ========================================================
     # Database
-    database_url: str
+    # ========================================================
 
-    # Web App
-    webapp_url: str
+    database_url: str = os.getenv(
+        "DATABASE_URL",
+        "sqlite:///./app.db"
+    )
 
+    # ========================================================
+    # Application
+    # ========================================================
+
+    environment: str = os.getenv(
+        "ENVIRONMENT",
+        "development"
+    )
+
+    app_name: str = os.getenv(
+        "APP_NAME",
+        "Secret Village"
+    )
+
+    debug: bool = os.getenv(
+        "DEBUG",
+        "false"
+    ).lower() == "true"
+
+    # ========================================================
+    # Media
+    # ========================================================
+
+    default_page_size: int = int(
+        os.getenv("DEFAULT_PAGE_SIZE", "10")
+    )
+
+    max_page_size: int = int(
+        os.getenv("MAX_PAGE_SIZE", "50")
+    )
+
+    max_upload_size_mb: int = int(
+        os.getenv("MAX_UPLOAD_SIZE_MB", "100")
+    )
+
+    # ========================================================
     # Security
-    secret_key: str
+    # ========================================================
 
-    # Optional Google OAuth
-    google_client_id: str
-    google_client_secret: str
-    google_redirect_uri: str
+    session_expiry_hours: int = int(
+        os.getenv("SESSION_EXPIRY_HOURS", "168")
+    )
+
+    max_login_attempts: int = int(
+        os.getenv("MAX_LOGIN_ATTEMPTS", "5")
+    )
+
+    # ========================================================
+    # Feature Defaults
+    # ========================================================
+
+    maintenance_mode: bool = os.getenv(
+        "MAINTENANCE_MODE",
+        "false"
+    ).lower() == "true"
+
+    photos_enabled: bool = True
+    videos_enabled: bool = True
+    audio_enabled: bool = True
+    documents_enabled: bool = True
+    search_enabled: bool = True
+    favorites_enabled: bool = True
+    secrets_enabled: bool = True
+
+
+settings = Settings()    google_redirect_uri: str
 
     # Application
     app_name: str
